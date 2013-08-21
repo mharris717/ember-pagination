@@ -1,0 +1,43 @@
+{
+  "name": "ember-pagination",
+  "summary": "Pagination framework for ember.js.",
+  "description": "Pagination framework for ember.js.",
+  "keywords": ["ember", "emberjs", "ember.js", "auth", "authentication"],
+  "homepage": "http://github.com/mharris717/ember-pagination",
+  "bugs": "http://github.com/mharris717/ember-pagination/issues",
+  "version": "0.0.1",
+  "main": "lib/main.js",
+
+  "author": {
+    "name": "mharris717",
+    "email": "mharris717@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "mharris717",
+      "email": "mharris717@gmail.com"
+    }
+  ],
+
+  "dependencies": {
+    "jquery": "",
+    "handlebars":""
+  },
+
+  "devDependencies": {
+     "mocha": "",
+     "should": "",
+     "coffee-script": ">= 1.3"
+   },
+
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+
+  "engines": { "node": "*" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mharris717/ember-pagination"
+  },
+  "license": "MIT"
+}
