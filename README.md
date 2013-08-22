@@ -21,3 +21,14 @@ A showMore method is automatically added to Ember.ArrayController.
 In your template, put something like this to load the next page:
 
     <a href="#" {{action showMore}}>Show More</a>
+
+Example Rails Controller:
+
+    # App must include WillPaginate and ActiveModelSerializers
+    class PostsController < ApplicationController
+      def index
+        page = (params[:page] || 1).to_i
+        @posts = Post.all.paginate(:page => page, :per_page => 5)
+        render :json => @posts, :meta => {:total_pages => @posts.total_pages, :page => page}
+      end
+    end
