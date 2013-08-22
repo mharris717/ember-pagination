@@ -1,5 +1,3 @@
-require "./module_setup"
-
 DS.Model.reopenClass
   loadMore: ->
     page = DS.defaultStore.typeMapFor(@).metadata.page + 1
@@ -19,6 +17,3 @@ Em.PaginationAdapter = DS.RESTAdapter.reopen
 serializer.configure
   total_pages: 'total_pages'
   page: 'page'
-
-module.exports = 
-  setup: require './module_setup'
