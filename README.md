@@ -32,3 +32,20 @@ Example Rails Controller:
         render :json => @posts, :meta => {:total_pages => @posts.total_pages, :page => page}
       end
     end
+
+### Server Format
+
+Request: The page number is sent as the page query param, or omitted if page is 1.
+Response: Server returns page and total_pages values in the meta tag of the response
+
+    {
+      "meta": {
+        "total_pages": 3,
+        "page": 1
+      },
+
+      "posts": [
+        {"id": 1, "title": "Hello World", body: "More to Come"},
+        ......
+      ]
+    }
