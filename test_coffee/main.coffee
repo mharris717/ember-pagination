@@ -22,5 +22,7 @@ describe "ember pagination", ->
 
   it 'smoke controller', ->
     a = Em.ArrayController.create()
-    res = !!a.modelClass
-    res.should.eql true
+    obj = {constructor: 17}
+    a.pushObject(obj)
+    
+    a.modelClass().should.eql 17
