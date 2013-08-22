@@ -10,6 +10,12 @@ Ember Pagination is also available as an npm module
 
 ### How to Use
 
+Just change your adapter from DS.RESTAdapter to Em.PaginationAdapter
+
+    App.Store = DS.Store.extend
+      revision: 11
+      adapter: 'Em.PaginationAdapter'
+
 A showMore method is automatically added to Ember.ArrayController. 
 
 In your template, put something like this to load the next page:

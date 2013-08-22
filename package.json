@@ -5,7 +5,7 @@
   "keywords": ["ember", "emberjs", "ember.js", "pagination"],
   "homepage": "http://github.com/mharris717/ember-pagination",
   "bugs": "http://github.com/mharris717/ember-pagination/issues",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/main.js",
 
   "author": {

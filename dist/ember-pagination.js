@@ -24,7 +24,7 @@
 
   serializer = DS.RESTSerializer.create();
 
-  Em.PaginationAdapter = DS.RESTAdapter.reopen({
+  Em.PaginationAdapter = DS.RESTAdapter.extend({
     serializer: serializer
   });
 
