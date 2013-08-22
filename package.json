@@ -2,10 +2,10 @@
   "name": "ember-pagination",
   "summary": "Pagination framework for ember.js.",
   "description": "Pagination framework for ember.js.",
-  "keywords": ["ember", "emberjs", "ember.js", "auth", "authentication"],
+  "keywords": ["ember", "emberjs", "ember.js", "pagination"],
   "homepage": "http://github.com/mharris717/ember-pagination",
   "bugs": "http://github.com/mharris717/ember-pagination/issues",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/main.js",
 
   "author": {
