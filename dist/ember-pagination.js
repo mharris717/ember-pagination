@@ -4,22 +4,57 @@
   var serializer;
 
   DS.Model.reopenClass({
+    storeMetadata: function(k) {
+      var res;
+      res = DS.defaultStore.typeMapFor(this).metadata;
+      if (k) {
+        res = res[k];
+      }
+      return res;
+    },
+    setStoreMetadata: function(k, v) {
+      var res;
+      res = DS.defaultStore.typeMapFor(this).metadata;
+      return res[k] = v;
+    },
     loadMore: function() {
       var page;
-      page = DS.defaultStore.typeMapFor(this).metadata.page + 1;
-      return this.find({
+      page = this.storeMetadata('page') + 1;
+      this.find({
         page: page
       });
+      return page;
+    },
+    hasMore: function() {
+      var page, total, unfiltered;
+      page = this.storeMetadata('page');
+      total = this.storeMetadata('total_pages');
+      unfiltered = this.storeMetadata('unfiltered_total_pages');
+      return page < unfiltered;
     }
   });
 
   Em.ArrayController.reopen({
     modelClass: function() {
-      return this.get('firstObject').constructor;
+      var res;
+      res = null;
+      this.forEach(function(obj) {
+        return res || (res = obj.constructor);
+      });
+      return res;
     },
     showMore: function() {
-      return this.modelClass().loadMore();
-    }
+      var page;
+      page = this.modelClass().loadMore();
+      return this.set('lastKnownPage', page);
+    },
+    hasMore: (function() {
+      if (this.modelClass()) {
+        return this.modelClass().hasMore();
+      } else {
+        return false;
+      }
+    }).property('lastKnownPage', 'firstObject', '@each', 'filtered.@each')
   });
 
   serializer = DS.RESTSerializer.create();
@@ -28,9 +63,29 @@
     serializer: serializer
   });
 
+  DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend({
+    findAll: function(store, type) {
+      var all, res;
+      type.setStoreMetadata("page", 1);
+      all = this.fixturesForType(type);
+      res = all.slice(0, 2);
+      return this.simulateRemoteCall(function() {
+        return this.didFindAll(store, type, res);
+      }, this);
+    },
+    queryFixtures: function(fixtures, query, type) {
+      var page, start;
+      page = query.page || 1;
+      type.setStoreMetadata("page", page);
+      start = (page - 1) * 2;
+      return fixtures.slice(start, start + 2);
+    }
+  });
+
   serializer.configure({
     total_pages: 'total_pages',
-    page: 'page'
+    page: 'page',
+    unfiltered_total_pages: 'unfiltered_total_pages'
   });
 
 }).call(this);
