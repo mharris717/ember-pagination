@@ -1,45 +1,44 @@
-DS.Model.reopenClass
-  storeMetadata: (store,k) ->
-    res = store.typeMapFor(@).metadata
+Em.ArrayController.reopen
+  modelClass: ->
+    @modelInfo.class
+  modelNameForStore: ->
+    @modelInfo.store
+
+  storeMetadata: (k) ->
+    res = @store.typeMapFor(@modelClass()).metadata
     res = res[k] if k
     res
 
-  setStoreMetadata: (store,k,v) ->
-    res = store.typeMapFor(@).metadata
+  setStoreMetadata: (k,v) ->
+    res = @store.typeMapFor(@modelClass()).metadata
     res[k] = v
 
-  loadMore: (store) ->
-    page = @storeMetadata(store,'page') + 1
-    @setStoreMetadata(store,'page',page)
-    store.findQuery('widget',page: page)
+  loadMore: ->
+    page = @storeMetadata('page') + 1
+    @setStoreMetadata('page',page)
+    @store.findQuery(@modelNameForStore(),page: page)
     page
 
-  hasMore: (store) ->
-    page = @storeMetadata(store,'page')
-    total = @storeMetadata(store,'total_pages')
-    unfiltered = @storeMetadata(store,'unfiltered_total_pages')
+  hasMoreFunc: ->
+    page = @storeMetadata('page')
+    total = @storeMetadata('total_pages')
+    unfiltered = @storeMetadata('unfiltered_total_pages')
     page < unfiltered
- 
-Em.ArrayController.reopen
-  modelClass: ->
-    res = null
-    @forEach (obj) ->
-      res ||= obj.constructor 
-    res
 
   showMore: ->
-    page = @modelClass().loadMore(@get('store'))
+    page = @loadMore()
     @set 'lastKnownPage',page
 
   hasMore: (->
-    if @modelClass()
-      @modelClass().hasMore(@get('store'))
-    else
-      false).property('lastKnownPage','firstObject','@each','filtered.@each')
+   @hasMoreFunc()).property('lastKnownPage','firstObject','@each','filtered.@each')
 
 DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend
+  setStoreMetadata: (store,type,k,v) ->
+    res = store.typeMapFor(type).metadata
+    res[k] = v
+
   findAll: (store,type) ->
-    type.setStoreMetadata(store,"page",1)
+    @setStoreMetadata store,type,'page',1
 
     all = @fixturesForType(type)
     res = all.slice(0,1)
@@ -48,7 +47,7 @@ DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend
       
   queryFixtures: (fixtures, query, type) ->
     page = query.page || 1
-    type.setStoreMetadata(@get('store'),"page",page) if @get('store')
+    setStoreMetadata(@get('store'),type,"page",page) if @get('store')
     start = (page-1)*1
 
     fixtures.slice(start,start+1)

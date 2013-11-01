@@ -3,65 +3,61 @@
 (function() {
   var serializer;
 
-  DS.Model.reopenClass({
-    storeMetadata: function(store, k) {
+  Em.ArrayController.reopen({
+    modelClass: function() {
+      return this.modelInfo["class"];
+    },
+    modelNameForStore: function() {
+      return this.modelInfo.store;
+    },
+    storeMetadata: function(k) {
       var res;
-      res = store.typeMapFor(this).metadata;
+      res = this.store.typeMapFor(this.modelClass()).metadata;
       if (k) {
         res = res[k];
       }
       return res;
     },
-    setStoreMetadata: function(store, k, v) {
+    setStoreMetadata: function(k, v) {
       var res;
-      res = store.typeMapFor(this).metadata;
+      res = this.store.typeMapFor(this.modelClass()).metadata;
       return res[k] = v;
     },
-    loadMore: function(store) {
+    loadMore: function() {
       var page;
-      page = this.storeMetadata(store, 'page') + 1;
-      this.setStoreMetadata(store, 'page', page);
-      store.findQuery('widget', {
+      page = this.storeMetadata('page') + 1;
+      this.setStoreMetadata('page', page);
+      this.store.findQuery(this.modelNameForStore(), {
         page: page
       });
       return page;
     },
-    hasMore: function(store) {
+    hasMoreFunc: function() {
       var page, total, unfiltered;
-      page = this.storeMetadata(store, 'page');
-      total = this.storeMetadata(store, 'total_pages');
-      unfiltered = this.storeMetadata(store, 'unfiltered_total_pages');
+      page = this.storeMetadata('page');
+      total = this.storeMetadata('total_pages');
+      unfiltered = this.storeMetadata('unfiltered_total_pages');
       return page < unfiltered;
-    }
-  });
-
-  Em.ArrayController.reopen({
-    modelClass: function() {
-      var res;
-      res = null;
-      this.forEach(function(obj) {
-        return res || (res = obj.constructor);
-      });
-      return res;
     },
     showMore: function() {
       var page;
-      page = this.modelClass().loadMore(this.get('store'));
+      page = this.loadMore();
       return this.set('lastKnownPage', page);
     },
     hasMore: (function() {
-      if (this.modelClass()) {
-        return this.modelClass().hasMore(this.get('store'));
-      } else {
-        return false;
-      }
+      return this.hasMoreFunc();
     }).property('lastKnownPage', 'firstObject', '@each', 'filtered.@each')
   });
 
   DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend({
+    setStoreMetadata: function(store, type, k, v) {
+      var res;
+      res = store.typeMapFor(type).metadata;
+      return res[k] = v;
+    },
     findAll: function(store, type) {
       var all, res;
-      type.setStoreMetadata(store, "page", 1);
+      this.setStoreMetadata(store, type, 'page', 1);
       all = this.fixturesForType(type);
       res = all.slice(0, 1);
       return res;
@@ -70,7 +66,7 @@
       var page, start;
       page = query.page || 1;
       if (this.get('store')) {
-        type.setStoreMetadata(this.get('store'), "page", page);
+        setStoreMetadata(this.get('store'), type, "page", page);
       }
       start = (page - 1) * 1;
       return fixtures.slice(start, start + 1);
