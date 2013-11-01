@@ -1,2 +1,4 @@
-var FixtureAdapter = DS.PaginationFixtureAdapter.extend();
-export default FixtureAdapter;
+<overlay>
+  action: replace
+  base: DS.FixtureAdapter
+</overlay>DS.PaginationFixtureAdapter
