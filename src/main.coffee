@@ -1,22 +1,23 @@
 DS.Model.reopenClass
-  storeMetadata: (k) ->
-    res = DS.defaultStore.typeMapFor(@).metadata
+  storeMetadata: (store,k) ->
+    res = store.typeMapFor(@).metadata
     res = res[k] if k
     res
 
-  setStoreMetadata: (k,v) ->
-    res = DS.defaultStore.typeMapFor(@).metadata
+  setStoreMetadata: (store,k,v) ->
+    res = store.typeMapFor(@).metadata
     res[k] = v
 
-  loadMore: ->
-    page = @storeMetadata('page') + 1
-    @find(page: page)
+  loadMore: (store) ->
+    page = @storeMetadata(store,'page') + 1
+    @setStoreMetadata(store,'page',page)
+    store.findQuery('widget',page: page)
     page
 
-  hasMore: ->
-    page = @storeMetadata('page')
-    total = @storeMetadata('total_pages')
-    unfiltered = @storeMetadata('unfiltered_total_pages')
+  hasMore: (store) ->
+    page = @storeMetadata(store,'page')
+    total = @storeMetadata(store,'total_pages')
+    unfiltered = @storeMetadata(store,'unfiltered_total_pages')
     page < unfiltered
  
 Em.ArrayController.reopen
@@ -27,39 +28,40 @@ Em.ArrayController.reopen
     res
 
   showMore: ->
-    page = @modelClass().loadMore()
+    page = @modelClass().loadMore(@get('store'))
     @set 'lastKnownPage',page
 
   hasMore: (->
     if @modelClass()
-      @modelClass().hasMore()
+      @modelClass().hasMore(@get('store'))
     else
       false).property('lastKnownPage','firstObject','@each','filtered.@each')
- 
-serializer = DS.RESTSerializer.create()
- 
-Em.PaginationAdapter = DS.RESTAdapter.extend
-  serializer: serializer
- 
+
 DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend
   findAll: (store,type) ->
-    type.setStoreMetadata("page",1)
+    type.setStoreMetadata(store,"page",1)
 
     all = @fixturesForType(type)
-    res = all.slice(0,2)
+    res = all.slice(0,1)
 
-    @simulateRemoteCall ->
-      @didFindAll(store, type, res)
-    ,@
-
+    res
+      
   queryFixtures: (fixtures, query, type) ->
     page = query.page || 1
-    type.setStoreMetadata("page",page)
-    start = (page-1)*2
+    type.setStoreMetadata(@get('store'),"page",page) if @get('store')
+    start = (page-1)*1
 
-    fixtures.slice(start,start+2)
+    fixtures.slice(start,start+1)
 
-serializer.configure
-  total_pages: 'total_pages'
-  page: 'page'
-  unfiltered_total_pages: 'unfiltered_total_pages'
+
+if false
+  serializer = DS.RESTSerializer.create()
+   
+  Em.PaginationAdapter = DS.RESTAdapter.extend
+    serializer: serializer
+
+  if serializer.configure
+    serializer.configure
+      total_pages: 'total_pages'
+      page: 'page'
+      unfiltered_total_pages: 'unfiltered_total_pages'
