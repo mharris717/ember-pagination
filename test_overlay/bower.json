@@ -1,0 +1,6 @@
+<overlay>
+  action: insert
+  after: ember-data.js"
+</overlay>
+
+,"ember-pagination": "https://raw.github.com/mharris717/ember-pagination/master/dist/ember-pagination.js"
