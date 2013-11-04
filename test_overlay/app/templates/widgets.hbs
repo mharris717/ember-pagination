@@ -1,5 +1,7 @@
 <overlay>append</overlay>
 
 <span class="more-link">
-<a href="#" {{action showMore}}>Show More</a>
+  {{#if hasMore}}
+    <a href="#" {{action showMore}}>Show More</a>
+  {{/if}}
 </span>

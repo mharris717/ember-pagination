@@ -23,7 +23,8 @@ Em.ArrayController.reopen
     page = @storeMetadata('page')
     total = @storeMetadata('total_pages')
     unfiltered = @storeMetadata('unfiltered_total_pages')
-    page < unfiltered
+
+    !unfiltered || page < unfiltered
 
   showMore: ->
     page = @loadMore()
@@ -43,6 +44,9 @@ DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend
     all = @fixturesForType(type)
     res = all.slice(0,1)
 
+    @setStoreMetadata store, type, 'total_pages',all.length
+    @setStoreMetadata store, type, 'unfiltered_total_pages',all.length
+
     res
       
   queryFixtures: (fixtures, query, type) ->
@@ -51,7 +55,6 @@ DS.PaginationFixtureAdapter = DS.FixtureAdapter.extend
     start = (page-1)*1
 
     fixtures.slice(start,start+1)
-
 
 if false
   serializer = DS.RESTSerializer.create()

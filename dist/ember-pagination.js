@@ -37,7 +37,7 @@
       page = this.storeMetadata('page');
       total = this.storeMetadata('total_pages');
       unfiltered = this.storeMetadata('unfiltered_total_pages');
-      return page < unfiltered;
+      return !unfiltered || page < unfiltered;
     },
     showMore: function() {
       var page;
@@ -60,6 +60,8 @@
       this.setStoreMetadata(store, type, 'page', 1);
       all = this.fixturesForType(type);
       res = all.slice(0, 1);
+      this.setStoreMetadata(store, type, 'total_pages', all.length);
+      this.setStoreMetadata(store, type, 'unfiltered_total_pages', all.length);
       return res;
     },
     queryFixtures: function(fixtures, query, type) {
