@@ -1,4 +1,5 @@
 if (console) console.debug("in adapters/application.js start");
+if (console) console.debug("testing: " + Em.testing);
 
 var ApplicationAdapter = null;
 
