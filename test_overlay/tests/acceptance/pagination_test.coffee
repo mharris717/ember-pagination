@@ -11,7 +11,11 @@ widgetTest = (name,f) ->
     visit("/widgets").then(f)
 
 widgetTest 'list', ->
-  equal find(".widget").length,1
+  res = []
+  for w in find(".widget")
+    res.push w.text().trim()
+
+  equal res,['Adam']
   equal find(".widget:eq(0)").text().trim(),"Adam"
 
 widgetTest 'show more', ->
