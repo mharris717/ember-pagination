@@ -1,4 +1,4 @@
-guard 'rake', :task => 'dist' do
+guard 'rake', :task => 'overlay:copy_dist' do
   watch(%r{^src/.+})
 end
 
