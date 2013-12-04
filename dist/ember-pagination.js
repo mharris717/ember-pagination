@@ -36,7 +36,7 @@
       var page, total, unfiltered;
       page = this.storeMetadata('page');
       total = this.storeMetadata('total_pages');
-      unfiltered = this.storeMetadata('unfiltered_total_pages');
+      unfiltered = total;
       return !unfiltered || page < unfiltered;
     },
     showMore: function() {

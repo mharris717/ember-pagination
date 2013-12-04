@@ -1,3 +1,5 @@
+`import Widget from 'appkit/models/widget'`
+
 module 'Acceptances - Pagination',
   setup: ->
     App.reset()
@@ -25,3 +27,10 @@ widgetTest 'has more link', ->
 widgetTest 'has more link goes away', ->
   click(".more-link a").then ->
     equal find(".more-link a").length,0
+
+widgetTest 'metadata look', ->
+  click(".more-link a").then ->
+    store = App.__container__.lookup("store:main")
+    md = store.typeMapFor(Widget).metadata
+    equal md.page,2
+    equal md.total_pages,2

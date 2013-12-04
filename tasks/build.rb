@@ -57,7 +57,7 @@ def run_shell_test(cmd)
 end
 
 task :dist => :build do
-  ec "#{browserify} lib/main.js > dist/ember-auth-easy.js"
+  ec "#{browserify} lib/main.js > dist/ember-pagination.js"
 end
 
 task :readme do

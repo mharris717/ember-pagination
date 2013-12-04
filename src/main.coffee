@@ -22,7 +22,10 @@ Em.ArrayController.reopen
   hasMoreFunc: ->
     page = @storeMetadata('page')
     total = @storeMetadata('total_pages')
-    unfiltered = @storeMetadata('unfiltered_total_pages')
+    #unfiltered = @storeMetadata('unfiltered_total_pages')
+    unfiltered = total
+
+    #console.debug "page #{page} total #{total} unfiltered #{unfiltered}"
 
     !unfiltered || page < unfiltered
 

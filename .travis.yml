@@ -3,4 +3,7 @@ install:
   - bundle install
   - npm install -g grunt-cli bower
   - npm install
-script: bundle exec rake overlay:test
+before_script:
+  - bundle exec rake test_server:build
+  - bundle exec rake test_server:start_in_background
+script: bundle exec rake overlay:test_both
