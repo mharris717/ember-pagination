@@ -16,7 +16,33 @@ Just change your adapter from DS.RESTAdapter to Em.PaginationAdapter
       revision: 11
       adapter: 'Em.PaginationAdapter'
 
-A showMore method is automatically added to Ember.ArrayController. 
+For your controllers, you must define info about your controller in modelInfo for the pagination to work.
+
+There are two ways to create your controller:
+
+```javascript
+// 1. Extend from Em.PaginationController instead of Em.ArrayController
+App.WidgetsController = Em.PaginationController.extend({
+  modelInfo: {
+    store: 'widget',
+    class: App.Widget
+  }
+});
+
+// OR
+
+// 2. Extend from Em.ArrayController and include the Em.PaginationModule
+App.WidgetsController = Em.ArrayController.extend(Em.PaginationModule,{
+  modelInfo: {
+    store: 'widget',
+    class: App.Widget
+  }
+});
+```
+
+This adds the showMore action to the controller.
+
+(If you are using Ember App Kit, import the model at the top of the page and use Widget instead of App.Widget)
 
 In your template, put something like this to load the next page:
 
