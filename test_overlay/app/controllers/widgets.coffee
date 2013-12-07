@@ -1,6 +1,6 @@
 `import Widget from 'appkit/models/widget'`
 
-WidgetsController = Em.ArrayController.extend
+WidgetsController = Em.PaginationController.extend
   modelInfo: 
     store: 'widget'
     class: Widget
