@@ -2,3 +2,9 @@ node_modules
 src
 test_coffee
 dist
+test_server
+test_overlay
+test_overlay_app
+tasks
+tmp
+junk
