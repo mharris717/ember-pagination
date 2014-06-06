@@ -24,6 +24,7 @@ There are two ways to create your controller:
 // 1. Extend from Em.PaginationController instead of Em.ArrayController
 App.WidgetsController = Em.PaginationController.extend({
   modelInfo: {
+    // for widget model
     store: 'widget',
     class: App.Widget
   }
@@ -34,13 +35,14 @@ App.WidgetsController = Em.PaginationController.extend({
 // 2. Extend from Em.ArrayController and include the Em.PaginationModule
 App.WidgetsController = Em.ArrayController.extend(Em.PaginationModule,{
   modelInfo: {
+    // for widget model
     store: 'widget',
     class: App.Widget
   }
 });
 ```
 
-This adds the showMore action to the controller.
+This adds the showMore action to the controller where 'widget' is the model name.
 
 (If you are using Ember App Kit, import the model at the top of the page and use Widget instead of App.Widget)
 
