@@ -1,3 +1,9 @@
+# DO NOT USE
+
+Working project is at [Ember-CLI-Pagination](http://github.com/mharris717/ember-cli-pagination)
+
+-----------------
+
 # Ember Pagination
 
 Simple library to do ember pagination. Works with servers using the will_paginate API.
